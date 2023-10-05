@@ -1,7 +1,6 @@
 package com.calendar.workout.web;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class WebController {
@@ -10,4 +9,7 @@ public class WebController {
     public String hello() {
         return "HelloWorld";
     }
+
+
+
 }

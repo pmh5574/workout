@@ -1,0 +1,10 @@
+### 테스트 요청
+
+POST http://localhost:8080/posts
+Content-Type: application/json
+
+{
+  "title" : "test@test.com",
+  "content": "1234",
+  "author": "test@test.com"
+}
