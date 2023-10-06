@@ -1,4 +1,16 @@
+# 기본 환경 선택
 spring:
+  config:
+    activate:
+      on-profile: local
+
+# local 환경
+---
+spring:
+  config:
+    activate:
+      on-profile: local
+
   h2:
     console:
       enabled: true
@@ -8,3 +20,13 @@ spring:
     username: sa
     password:
     driver-class-name: org.h2.Driver
+
+  jpa:
+#    defer-datasource-initialization: true
+
+    show-sql: true
+    hibernate:
+      ddl-auto: create-drop
+
+
+
