@@ -1,0 +1,2 @@
+INSERT INTO posts (title, author, content, created_date, modified_date) VALUES ('테스트1', 'test1@gmail.com', '테스트1의 본문', '2023-10-10 18:12:22', '2023-10-10 18:12:22');
+INSERT INTO posts (title, author, content, created_date, modified_date) VALUES ('테스트2', 'test2@gmail.com', '테스트2의 본문', '2023-10-10 18:12:22', '2023-10-10 18:12:22');
