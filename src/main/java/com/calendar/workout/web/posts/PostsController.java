@@ -1,14 +1,12 @@
 package com.calendar.workout.web.posts;
 
+import com.calendar.workout.dto.posts.request.PostsEditRequestDto;
 import com.calendar.workout.dto.posts.request.PostsSaveRequestDto;
 import com.calendar.workout.dto.posts.response.PostsListResponseDto;
 import com.calendar.workout.service.posts.PostsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -26,5 +24,15 @@ public class PostsController {
     @PostMapping("/posts")
     public void savePosts(@RequestBody @Validated PostsSaveRequestDto postsSaveRequestDto) {
         postsService.save(postsSaveRequestDto);
+    }
+
+    @PatchMapping("/posts/{postsId}")
+    public void editPosts(@PathVariable Long postsId, @RequestBody @Validated PostsEditRequestDto postsEditRequestDto) {
+        postsService.edit(postsId, postsEditRequestDto);
+    }
+
+    @DeleteMapping("/posts/{postsId}")
+    public void deletePosts(@PathVariable Long postsId) {
+        postsService.delete(postsId);
     }
 }

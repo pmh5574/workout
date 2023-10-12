@@ -1,6 +1,7 @@
 package com.calendar.workout.domain.posts;
 
 import com.calendar.workout.domain.BaseTimeEntity;
+import com.calendar.workout.dto.posts.PostsEditor;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -30,5 +31,16 @@ public class Posts extends BaseTimeEntity {
         this.title = title;
         this.content = content;
         this.author = author;
+    }
+
+    public void edit(PostsEditor postsEditor) {
+        this.title = postsEditor.getTitle();
+        this.content = postsEditor.getContent();
+    }
+
+    public PostsEditor.PostsEditorBuilder toEditor() {
+        return PostsEditor.builder()
+                .title(this.title)
+                .content(this.content);
     }
 }
