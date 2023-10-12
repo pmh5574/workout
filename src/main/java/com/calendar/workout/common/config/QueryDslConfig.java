@@ -1,4 +1,4 @@
-package com.calendar.workout.config;
+package com.calendar.workout.common.config;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
