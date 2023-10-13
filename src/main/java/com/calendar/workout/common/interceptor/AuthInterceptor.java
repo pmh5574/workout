@@ -19,7 +19,7 @@ public class AuthInterceptor implements HandlerInterceptor {
     private final AuthService authService;
 
     @Override
-    public boolean preHandle(final HttpServletRequest request, final HttpServletResponse response, final Object handler) {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
 
         if (!(handler instanceof final HandlerMethod handlerMethod)) {
             return true;
@@ -36,13 +36,13 @@ public class AuthInterceptor implements HandlerInterceptor {
         return true;
     }
 
-    private void checkHeader(final String authorizationHeader) {
+    private void checkHeader(String authorizationHeader) {
         if (authorizationHeader == null || !authorizationHeader.startsWith(BEARER)) {
             throw new UnauthorizedException();
         }
     }
 
-    private void checkTokenCertify(final String token) {
+    private void checkTokenCertify(String token) {
         if (!authService.isCertified(token)) {
             throw new UnauthorizedException();
         }
