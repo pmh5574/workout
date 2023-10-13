@@ -1,6 +1,6 @@
 package com.calendar.workout.common.config;
 
-import com.calendar.workout.common.AuthInterceptor;
+import com.calendar.workout.common.interceptor.AuthInterceptor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;

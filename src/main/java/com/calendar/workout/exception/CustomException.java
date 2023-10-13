@@ -1,12 +1,10 @@
 package com.calendar.workout.exception;
 
 
-import java.util.HashMap;
-import java.util.Map;
+import lombok.Getter;
 
+@Getter
 public abstract class CustomException extends RuntimeException {
-
-    private final Map<String, String> validation = new HashMap<>();
 
     protected CustomException(String message) {
         super(message);
@@ -16,5 +14,5 @@ public abstract class CustomException extends RuntimeException {
         super(message, cause);
     }
 
-    protected abstract int getStatusCode();
+    public abstract int getStatusCode();
 }

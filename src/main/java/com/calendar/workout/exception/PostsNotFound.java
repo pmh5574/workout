@@ -9,7 +9,7 @@ public class PostsNotFound extends CustomException {
     }
 
     @Override
-    protected int getStatusCode() {
+    public int getStatusCode() {
         return 404;
     }
 

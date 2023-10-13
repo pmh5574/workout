@@ -7,4 +7,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class AuthService {
 
+    public boolean isCertified(String token) {
+        return false;
+    }
 }
