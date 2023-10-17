@@ -1,6 +1,6 @@
 package com.calendar.workout.service.auth;
 
-import com.calendar.workout.dto.auth.request.LoginRequest;
+import com.calendar.workout.service.auth.mapper.OauthMapper;
 import com.calendar.workout.service.auth.mapper.OauthMappers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,7 +15,8 @@ public class AuthService {
         return false;
     }
 
-    public LoginTokens login(String oauthType, LoginRequest loginRequest) {
-        convertToOauthToken
+    public void login(String oauthType, String code) {
+        OauthMapper oauthMapper = oauthMappers.convertToOauthMapper(oauthType);
+        oauthMapper.getOauthUser(code);
     }
 }

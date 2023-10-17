@@ -7,7 +7,7 @@ build/
 /src/main/generated
 
 ### 인증정보 제외
-/src/main/resources/oauth.yml
+/src/main/resources/application.yml
 
 ### STS ###
 .apt_generated
