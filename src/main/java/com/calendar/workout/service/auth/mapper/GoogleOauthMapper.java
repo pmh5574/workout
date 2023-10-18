@@ -1,6 +1,8 @@
 package com.calendar.workout.service.auth.mapper;
 
+import com.calendar.workout.dto.auth.response.GoogleUserInfo;
 import com.calendar.workout.dto.auth.response.OauthAccessToken;
+import com.calendar.workout.exception.InvalidAccessTokenException;
 import com.calendar.workout.exception.InvalidAuthorizationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -50,20 +52,26 @@ public class GoogleOauthMapper implements OauthMapper {
     }
 
     @Override
-    public void getOauthUser(String code) {
+    public GoogleUserInfo getOauthUser(String code) {
         String accessToken = getAccessToken(code);
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setBearerAuth(accessToken);
 
         HttpEntity<MultiValueMap<String, String>> userInfoRequestEntity = new HttpEntity<>(httpHeaders);
 
-        ResponseEntity<String> response = restTemplate.exchange(
+        ResponseEntity<GoogleUserInfo> response = restTemplate.exchange(
                 userUri,
                 HttpMethod.GET,
                 userInfoRequestEntity,
-                String.class
+                GoogleUserInfo.class
         );
-        log.info("response == {}", response.getBody());
+
+        if (response.getStatusCode().is2xxSuccessful()) {
+            return response.getBody();
+        }
+
+
+        throw new InvalidAccessTokenException();
     }
 
     private String getAccessToken(String code) {
