@@ -1,41 +1,40 @@
 package com.calendar.workout.service.auth;
 
-import com.calendar.workout.domain.auth.RefreshToken;
 import io.jsonwebtoken.Header;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import java.util.Date;
+import javax.crypto.SecretKey;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-
-import javax.crypto.SecretKey;
-import java.util.Date;
 
 @Component
 public class JwtTokenProvider {
 
     private final SecretKey secretKey;
-    private final Long accessTokenValidityInSeconds;
-    private final Long refreshTokenValidityInSeconds;
+    private final Long accessTokenValiditySeconds;
+    private final Long refreshTokenValiditySeconds;
 
     public JwtTokenProvider(@Value("${jwt.secret-key}") SecretKey secretKey,
-                            @Value("#{T(Long).parseLong('${jwt.access-expire-time}')}") Long accessTokenValidityInSeconds,
-                            @Value("#{T(Long).parseLong('${jwt.refresh-expire-time}')}") Long refreshTokenValidityInSeconds) {
+                            @Value("#{T(Long).parseLong('${jwt.access-expire-time}')}") Long accessTokenValiditySeconds,
+                            @Value("#{T(Long).parseLong('${jwt.refresh-expire-time}')}") Long refreshTokenValiditySeconds) {
         this.secretKey = secretKey;
-        this.accessTokenValidityInSeconds = accessTokenValidityInSeconds;
-        this.refreshTokenValidityInSeconds = refreshTokenValidityInSeconds;
+        this.accessTokenValiditySeconds = accessTokenValiditySeconds;
+        this.refreshTokenValiditySeconds = refreshTokenValiditySeconds;
     }
 
-    public RefreshToken createRefreshToken(String time) {
-        createToken(s)
+    public String createRefreshToken(String subject) {
+        return createToken(refreshTokenValiditySeconds, subject);
     }
 
-    public void createAccessToken(RefreshToken refreshToken) {
+    public String createAccessToken(String subject) {
+        return createToken(accessTokenValiditySeconds, subject);
     }
 
-    private String createToken(Long Time) {
+    private String createToken(Long Time, String subject) {
 
-        long now = new Date().getTime();
-        Date validTime = new Date(now + validity);
+        Date now = new Date();
+        Date validTime = new Date(now.getTime() + Time);
 
         return Jwts.builder()
                 .setHeaderParam(Header.TYPE, Header.JWT_TYPE)

@@ -31,8 +31,8 @@ public class AuthService {
 
         Member member = findOrSaveMember(googleUserInfo);
 
-        RefreshToken refreshToken = jwtTokenProvider.createRefreshToken(String.valueOf(member.getId()));
-        jwtTokenProvider.createAccessToken(refreshToken);
+        String refreshToken = jwtTokenProvider.createRefreshToken(String.valueOf(member.getId()));
+        String accessToken = jwtTokenProvider.createAccessToken(refreshToken);
     }
 
     @Transactional
