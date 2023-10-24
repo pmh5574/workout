@@ -1,6 +1,5 @@
 package com.calendar.workout.service.auth;
 
-import com.calendar.workout.domain.auth.RefreshToken;
 import com.calendar.workout.domain.member.Member;
 import com.calendar.workout.domain.member.MemberRepository;
 import com.calendar.workout.dto.auth.response.GoogleUserInfo;
@@ -31,8 +30,8 @@ public class AuthService {
 
         Member member = findOrSaveMember(googleUserInfo);
 
-        String refreshToken = jwtTokenProvider.createRefreshToken(String.valueOf(member.getId()));
-        String accessToken = jwtTokenProvider.createAccessToken(refreshToken);
+        String refreshToken = jwtTokenProvider.createRefreshToken();
+        String accessToken = jwtTokenProvider.createAccessToken(String.valueOf(member.getId()));
     }
 
     @Transactional

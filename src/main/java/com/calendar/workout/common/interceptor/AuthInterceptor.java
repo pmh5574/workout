@@ -21,16 +21,16 @@ public class AuthInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
 
-        if (!(handler instanceof final HandlerMethod handlerMethod)) {
+        if (!(handler instanceof HandlerMethod handlerMethod)) {
             return true;
         }
 
         if (handlerMethod.hasMethodAnnotation(Authenticated.class)) {
 
-            final String authorizationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
+            String authorizationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
             checkHeader(authorizationHeader);
 
-            final String token = authorizationHeader.substring(BEARER.length());
+            String token = authorizationHeader.substring(BEARER.length());
             checkTokenCertify(token);
         }
         return true;
