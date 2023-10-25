@@ -8,7 +8,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 @Getter
-public class PostsListResponseDto {
+public class PostsListResponse {
 
     private Long id;
 
@@ -20,7 +20,7 @@ public class PostsListResponseDto {
     
     private String createdDate;
 
-    public PostsListResponseDto(Posts entity) {
+    public PostsListResponse(Posts entity) {
         this.id = entity.getId();
         this.title = entity.getTitle();
         this.content = entity.getContent();

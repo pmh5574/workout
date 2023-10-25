@@ -1,7 +1,10 @@
 package com.calendar.workout.service.auth;
 
+import com.calendar.workout.domain.auth.RefreshToken;
+import com.calendar.workout.domain.auth.RefreshTokenRepository;
 import com.calendar.workout.domain.member.Member;
 import com.calendar.workout.domain.member.MemberRepository;
+import com.calendar.workout.dto.auth.AuthTokens;
 import com.calendar.workout.dto.auth.response.GoogleUserInfo;
 import com.calendar.workout.service.auth.mapper.OauthMapper;
 import com.calendar.workout.service.auth.mapper.OauthMappers;
@@ -17,6 +20,8 @@ public class AuthService {
 
     private final MemberRepository memberRepository;
 
+    private final RefreshTokenRepository refreshTokenRepository;
+
     private final JwtTokenProvider jwtTokenProvider;
 
     public boolean isCertified(String token) {
@@ -24,7 +29,7 @@ public class AuthService {
     }
 
     @Transactional
-    public void login(String oauthType, String code) {
+    public AuthTokens login(String oauthType, String code) {
         OauthMapper oauthMapper = oauthMappers.convertToOauthMapper(oauthType);
         GoogleUserInfo googleUserInfo = oauthMapper.getOauthUser(code);
 
@@ -32,6 +37,17 @@ public class AuthService {
 
         String refreshToken = jwtTokenProvider.createRefreshToken();
         String accessToken = jwtTokenProvider.createAccessToken(String.valueOf(member.getId()));
+
+        RefreshToken saveRefreshToken = RefreshToken.builder()
+                .token(refreshToken)
+                .member(member)
+                .build();
+        refreshTokenRepository.save(saveRefreshToken);
+        return AuthTokens.builder()
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .build();
+
     }
 
     @Transactional

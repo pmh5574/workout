@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class PostsEditRequestDto {
+public class PostsEditRequest {
 
     @NotBlank(message = "제목을 입력해 주세요.")
     private String title;
@@ -16,7 +16,7 @@ public class PostsEditRequestDto {
     private String content;
 
     @Builder
-    public PostsEditRequestDto(String title, String content) {
+    public PostsEditRequest(String title, String content) {
         this.title = title;
         this.content = content;
     }

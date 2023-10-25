@@ -2,9 +2,9 @@ package com.calendar.workout.service.posts;
 
 import com.calendar.workout.domain.posts.Posts;
 import com.calendar.workout.domain.posts.PostsRepository;
-import com.calendar.workout.dto.posts.request.PostsEditRequestDto;
-import com.calendar.workout.dto.posts.request.PostsSaveRequestDto;
-import com.calendar.workout.dto.posts.response.PostsListResponseDto;
+import com.calendar.workout.dto.posts.request.PostsEditRequest;
+import com.calendar.workout.dto.posts.request.PostsSaveRequest;
+import com.calendar.workout.dto.posts.response.PostsListResponse;
 import com.calendar.workout.exception.PostsNotFound;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -37,7 +37,7 @@ class PostsServiceTest {
     @DisplayName("Dto 데이터가 posts 테이블에 저장된다.")
     void test() {
         // given
-        PostsSaveRequestDto dto = PostsSaveRequestDto.builder()
+        PostsSaveRequest dto = PostsSaveRequest.builder()
                 .author("test@test.com")
                 .content("테스트")
                 .title("테스트 타이틀")
@@ -68,7 +68,7 @@ class PostsServiceTest {
         postsRepository.saveAll(requestPosts);
 
         // when
-        List<PostsListResponseDto> posts = postsService.getList();
+        List<PostsListResponse> posts = postsService.getList();
 
         // then
         assertThat(posts).hasSize(30);
@@ -87,12 +87,12 @@ class PostsServiceTest {
                 .build();
         postsRepository.save(posts);
 
-        PostsEditRequestDto postsEditRequestDto = PostsEditRequestDto.builder()
+        PostsEditRequest postsEditRequest = PostsEditRequest.builder()
                 .title("테스트 수정")
                 .build();
 
         // when
-        postsService.edit(posts.getId(), postsEditRequestDto);
+        postsService.edit(posts.getId(), postsEditRequest);
 
         // then
         Posts changedPosts = postsRepository.findById(posts.getId())
@@ -111,12 +111,12 @@ class PostsServiceTest {
                 .build();
         postsRepository.save(posts);
 
-        PostsEditRequestDto postsEditRequestDto = PostsEditRequestDto.builder()
+        PostsEditRequest postsEditRequest = PostsEditRequest.builder()
                 .title("테스트 수정")
                 .build();
 
         // then
-        assertThatThrownBy(() -> postsService.edit(2L, postsEditRequestDto))
+        assertThatThrownBy(() -> postsService.edit(2L, postsEditRequest))
                 .isInstanceOf(PostsNotFound.class);
 
     }
