@@ -5,7 +5,7 @@ import com.calendar.workout.domain.auth.RefreshTokenRepository;
 import com.calendar.workout.domain.member.Member;
 import com.calendar.workout.domain.member.MemberRepository;
 import com.calendar.workout.dto.auth.AuthTokens;
-import com.calendar.workout.dto.auth.response.GoogleUserInfo;
+import com.calendar.workout.dto.auth.OauthUserInfo;
 import com.calendar.workout.service.auth.mapper.OauthMapper;
 import com.calendar.workout.service.auth.mapper.OauthMappers;
 import lombok.RequiredArgsConstructor;
@@ -31,9 +31,9 @@ public class AuthService {
     @Transactional
     public AuthTokens login(String oauthType, String code) {
         OauthMapper oauthMapper = oauthMappers.convertToOauthMapper(oauthType);
-        GoogleUserInfo googleUserInfo = oauthMapper.getOauthUser(code);
+        OauthUserInfo oauthUserInfo = oauthMapper.getOauthUser(code);
 
-        Member member = findOrSaveMember(googleUserInfo);
+        Member member = findOrSaveMember(oauthUserInfo);
 
         String refreshToken = jwtTokenProvider.createRefreshToken();
         String accessToken = jwtTokenProvider.createAccessToken(String.valueOf(member.getId()));
@@ -51,17 +51,17 @@ public class AuthService {
     }
 
     @Transactional
-    public Member findOrSaveMember(GoogleUserInfo googleUserInfo) {
-        return memberRepository.findByOauthId(googleUserInfo.id())
-                .orElseGet(() -> saveMember(googleUserInfo));
+    public Member findOrSaveMember(OauthUserInfo oauthUserInfo) {
+        return memberRepository.findByOauthId(oauthUserInfo.getId())
+                .orElseGet(() -> saveMember(oauthUserInfo));
     }
 
     @Transactional
-    public Member saveMember(GoogleUserInfo googleUserInfo) {
+    public Member saveMember(OauthUserInfo oauthUserInfo) {
         Member member = Member.builder()
-                .name(googleUserInfo.name())
-                .email(googleUserInfo.email())
-                .oauthId(googleUserInfo.id())
+                .name(oauthUserInfo.getName())
+                .email(oauthUserInfo.getEmail())
+                .oauthId(oauthUserInfo.getId())
                 .build();
 
         return memberRepository.save(member);

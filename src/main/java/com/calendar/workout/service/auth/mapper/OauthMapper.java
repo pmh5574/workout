@@ -1,6 +1,6 @@
 package com.calendar.workout.service.auth.mapper;
 
-import com.calendar.workout.dto.auth.response.GoogleUserInfo;
+import com.calendar.workout.dto.auth.OauthUserInfo;
 import org.springframework.web.client.RestTemplate;
 
 public interface OauthMapper {
@@ -9,5 +9,5 @@ public interface OauthMapper {
 
     boolean convertToOauthType(String oauthType);
 
-    GoogleUserInfo getOauthUser(String code);
+    OauthUserInfo getOauthUser(String code);
 }
