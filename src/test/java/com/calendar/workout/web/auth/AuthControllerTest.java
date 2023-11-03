@@ -1,33 +1,37 @@
 package com.calendar.workout.web.auth;
 
+import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+
 import com.calendar.workout.dto.auth.AuthTokens;
 import com.calendar.workout.dto.auth.request.LoginRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
 
-@WebMvcTest(AuthController.class)
-@MockBean(JpaMetamodelMappingContext.class)
-@AutoConfigureRestDocs
+@AutoConfigureMockMvc
+@SpringBootTest
 class AuthControllerTest {
-
-    @Autowired
-    private AuthController authController;
-
-    @Autowired
-    private ObjectMapper objectMapper;
 
     private final static String REFRESH_TOKEN = "refreshToken";
     private final static String ACCESS_TOKEN = "accessToken";
+    private final static String TYPE_GOOGLE = "google";
+
+    @Autowired
+    private ObjectMapper objectMapper;
+    @Autowired
+    private MockMvc mockMvc;
+
+
 
     @DisplayName("로그인")
     @Test
-    void login() {
+    void test() throws Exception {
         // given
         LoginRequest loginRequest = new LoginRequest("code");
         AuthTokens authTokens = AuthTokens.builder()
@@ -36,11 +40,11 @@ class AuthControllerTest {
                 .build();
 
         // when
+        String json = objectMapper.writeValueAsString(loginRequest);
 
         // then
-    }
-
-    void test() {
-
+        ResultActions resultActions = mockMvc.perform(post("/api/auth/{oauthType}", TYPE_GOOGLE)
+                        .contentType(APPLICATION_JSON)
+                        .content(json));
     }
 }
