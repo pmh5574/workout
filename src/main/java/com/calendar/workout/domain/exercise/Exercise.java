@@ -8,8 +8,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToMany;
-import java.util.List;
+import jakarta.persistence.ManyToMany;
+import java.util.Set;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -25,8 +25,8 @@ public class Exercise {
     @Column(nullable = false)
     private String name;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "exercise")
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id", nullable = false)
-    private List<Category> categories;
+    private Set<Category> categories;
 
 }
