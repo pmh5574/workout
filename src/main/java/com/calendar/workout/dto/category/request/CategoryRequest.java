@@ -20,7 +20,7 @@ public class CategoryRequest {
 
     public Category toEntity() {
         return Category.builder()
-                .parentId(parentId)
+//                .parentId(parentId)
                 .depth(depth)
                 .name(name)
                 .build();
