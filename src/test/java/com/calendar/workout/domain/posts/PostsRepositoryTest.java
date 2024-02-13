@@ -1,5 +1,7 @@
 package com.calendar.workout.domain.posts;
 
+import com.calendar.workout.domain.member.Member;
+import com.calendar.workout.domain.member.MemberRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,8 +20,20 @@ class PostsRepositoryTest {
     @Autowired
     PostsRepository postsRepository;
 
+    @Autowired
+    MemberRepository memberRepository;
+    Member member;
+
+
     @BeforeEach
     void cleanUp() {
+        member = Member.builder()
+                .oauthId("test1")
+                .name("테스터")
+                .email("test@test.com")
+                .build();
+        memberRepository.save(member);
+
         postsRepository.deleteAll();
     }
 
@@ -30,7 +44,7 @@ class PostsRepositoryTest {
         postsRepository.save(Posts.builder()
                 .title("테스트 게시글")
                 .content("테스트 본문")
-                .author("test@test.com")
+                .member(member)
                 .build());
 
         // when
@@ -50,7 +64,7 @@ class PostsRepositoryTest {
         postsRepository.save(Posts.builder()
                 .title("테스트 게시글")
                 .content("테스트 본문")
-                .author("test@test.com")
+                .member(member)
                 .build());
 
         // when
@@ -69,13 +83,13 @@ class PostsRepositoryTest {
         postsRepository.save(Posts.builder()
                 .title("테스트 게시글")
                 .content("테스트 본문")
-                .author("test@test.com")
+                .member(member)
                 .build());
 
         postsRepository.save(Posts.builder()
                 .title("테스트 게시글2")
                 .content("테스트 본문2")
-                .author("test@test.com2")
+                .member(member)
                 .build());
         // when
         List<Posts> postsList = postsRepository.getList();

@@ -1,5 +1,7 @@
 package com.calendar.workout.service.posts;
 
+import com.calendar.workout.domain.member.Member;
+import com.calendar.workout.domain.member.MemberRepository;
 import com.calendar.workout.domain.posts.Posts;
 import com.calendar.workout.domain.posts.PostsRepository;
 import com.calendar.workout.dto.posts.PostsEditor;
@@ -12,24 +14,28 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
 public class PostsService {
 
     private final PostsRepository postsRepository;
+    private final MemberRepository memberRepository;
 
     @Transactional
     public Long save(PostsSaveRequest postsSaveRequest) {
-        return postsRepository.save(postsSaveRequest.toEntity()).getId();
+        Member member = memberRepository.findById(postsSaveRequest.getMemberId())
+                        .orElseThrow(() -> new IllegalArgumentException("잘못된 요청입니다."));
+
+        return postsRepository.save(postsSaveRequest.toEntity(member))
+                .getId();
     }
 
     @Transactional(readOnly = true)
     public List<PostsListResponse> getList() {
         return postsRepository.getList().stream()
                 .map(PostsListResponse::new)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Transactional

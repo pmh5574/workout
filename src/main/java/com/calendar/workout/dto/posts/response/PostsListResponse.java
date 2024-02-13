@@ -1,5 +1,6 @@
 package com.calendar.workout.dto.posts.response;
 
+import com.calendar.workout.domain.member.Member;
 import com.calendar.workout.domain.posts.Posts;
 import lombok.Getter;
 
@@ -16,7 +17,7 @@ public class PostsListResponse {
     
     private String content;
 
-    private String author;
+    private Member member;
     
     private String createdDate;
 
@@ -24,7 +25,7 @@ public class PostsListResponse {
         this.id = entity.getId();
         this.title = entity.getTitle();
         this.content = entity.getContent();
-//        this.author = entity.getAuthor();
+        this.member = entity.getMember();
         this.createdDate = toStringDateTime(entity.getCreatedDate());
     }
 

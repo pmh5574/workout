@@ -1,5 +1,6 @@
 package com.calendar.workout.dto.posts.request;
 
+import com.calendar.workout.domain.member.Member;
 import com.calendar.workout.domain.posts.Posts;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
@@ -16,21 +17,21 @@ public class PostsSaveRequest {
     @NotBlank(message = "내용을 입력해 주세요.")
     private String content;
 
-    @NotBlank(message = "작성자를 입력해 주세요.")
-    private String author;
+    @NotBlank(message = "회원번호가 없습니다.")
+    private Long memberId;
 
     @Builder
-    public PostsSaveRequest(String title, String content, String author) {
+    public PostsSaveRequest(String title, String content, Long memberId) {
         this.title = title;
         this.content = content;
-//        this.author = author;
+        this.memberId = memberId;
     }
 
-    public Posts toEntity() {
+    public Posts toEntity(Member member) {
         return Posts.builder()
                 .title(title)
                 .content(content)
-//                .author(author)
+                .member(member)
                 .build();
     }
 
