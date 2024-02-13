@@ -1,6 +1,7 @@
 package com.calendar.workout.domain.posts;
 
 import com.calendar.workout.domain.BaseTimeEntity;
+import com.calendar.workout.domain.member.Member;
 import com.calendar.workout.dto.posts.PostsEditor;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -15,6 +16,7 @@ public class Posts extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "posts_id")
     private Long id;
 
     @Column(length = 500, nullable = false)
@@ -23,14 +25,15 @@ public class Posts extends BaseTimeEntity {
     @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
 
-    @Column
-    private String author;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
+    private Member member;
 
     @Builder
-    public Posts(String title, String content, String author) {
+    public Posts(String title, String content, Member member) {
         this.title = title;
         this.content = content;
-        this.author = author;
+        this.member = member;
     }
 
     public void edit(PostsEditor postsEditor) {

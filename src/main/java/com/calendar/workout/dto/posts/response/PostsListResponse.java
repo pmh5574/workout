@@ -24,7 +24,7 @@ public class PostsListResponse {
         this.id = entity.getId();
         this.title = entity.getTitle();
         this.content = entity.getContent();
-        this.author = entity.getAuthor();
+//        this.author = entity.getAuthor();
         this.createdDate = toStringDateTime(entity.getCreatedDate());
     }
 

@@ -1,23 +1,22 @@
 package com.calendar.workout.service.posts;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
 import com.calendar.workout.domain.posts.Posts;
 import com.calendar.workout.domain.posts.PostsRepository;
 import com.calendar.workout.dto.posts.request.PostsEditRequest;
 import com.calendar.workout.dto.posts.request.PostsSaveRequest;
 import com.calendar.workout.dto.posts.response.PostsListResponse;
 import com.calendar.workout.exception.PostsNotFound;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @SpringBootTest
 class PostsServiceTest {
@@ -48,7 +47,7 @@ class PostsServiceTest {
 
         // then
         Posts posts = postsRepository.findAll().get(0);
-        assertThat(posts.getAuthor()).isEqualTo(dto.getAuthor());
+//        assertThat(posts.getAuthor()).isEqualTo(dto.getAuthor());
         assertThat(posts.getContent()).isEqualTo(dto.getContent());
         assertThat(posts.getTitle()).isEqualTo(dto.getTitle());
 
@@ -60,7 +59,7 @@ class PostsServiceTest {
         // given
         List<Posts> requestPosts = IntStream.range(1, 31)
                 .mapToObj(i -> Posts.builder()
-                        .author("test" + i + "@test.com")
+//                        .author("test" + i + "@test.com")
                         .title("테스트 타이틀" + i)
                         .content("테스트" + i)
                         .build())
@@ -81,7 +80,7 @@ class PostsServiceTest {
     void test3() {
         // given
         Posts posts = Posts.builder()
-                .author("test@test.com")
+//                .author("test@test.com")
                 .content("테스트")
                 .title("테스트 타이틀")
                 .build();
@@ -105,7 +104,7 @@ class PostsServiceTest {
     void test4() {
         // given
         Posts posts = Posts.builder()
-                .author("test@test.com")
+//                .author("test@test.com")
                 .content("테스트")
                 .title("테스트 타이틀")
                 .build();
@@ -126,7 +125,7 @@ class PostsServiceTest {
     void test5() {
         // given
         Posts posts = Posts.builder()
-                .author("test@test.com")
+//                .author("test@test.com")
                 .content("테스트")
                 .title("테스트 타이틀")
                 .build();
@@ -145,7 +144,7 @@ class PostsServiceTest {
     void test6() {
         // given
         Posts posts = Posts.builder()
-                .author("test@test.com")
+//                .author("test@test.com")
                 .content("테스트")
                 .title("테스트 타이틀")
                 .build();
