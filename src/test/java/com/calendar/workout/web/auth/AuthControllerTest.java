@@ -1,8 +1,5 @@
 package com.calendar.workout.web.auth;
 
-import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-
 import com.calendar.workout.dto.auth.AuthTokens;
 import com.calendar.workout.dto.auth.request.LoginRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -13,6 +10,9 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+
+import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 @AutoConfigureMockMvc
 @SpringBootTest
@@ -27,11 +27,11 @@ class AuthControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-
-
     @DisplayName("로그인")
     @Test
     void test() throws Exception {
+        //todo 인증 테스트 해야함
+
         // given
         LoginRequest loginRequest = new LoginRequest("code");
         AuthTokens authTokens = AuthTokens.builder()
