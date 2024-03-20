@@ -15,7 +15,7 @@ public class CategoryService {
     private final CategoryRepository categoryRepository;
 
     @Transactional
-    public Long save(CategoryRequest categoryRequest) {
+    public Long save(final CategoryRequest categoryRequest) {
         Category category = categoryRequest.toEntity();
 
         if (categoryRequest.getParentId() != null) {

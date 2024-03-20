@@ -28,6 +28,10 @@ public class Exercise extends BaseTimeEntity {
     @Column(nullable = false)
     private String name;
 
+    private ExerciseType exerciseType;
+
+    private ToolType toolType;
+
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
     private List<CategoryExercise> categories = new ArrayList<>();
 
