@@ -1,17 +1,27 @@
 package com.calendar.workout.domain.category;
 
+import static lombok.AccessLevel.PROTECTED;
+
 import com.calendar.workout.domain.BaseTimeEntity;
 import com.calendar.workout.domain.CategoryStatus;
 import com.calendar.workout.domain.exercise.CategoryExercise;
-import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static lombok.AccessLevel.PROTECTED;
 
 @Getter
 @NoArgsConstructor(access = PROTECTED)
@@ -37,10 +47,10 @@ public class Category extends BaseTimeEntity {
     @JoinColumn(name = "parent_id")
     private Category parent;
 
-    @OneToMany(mappedBy = "parent")
+    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL)
     private List<Category> child = new ArrayList<>();
 
-    @OneToMany(mappedBy = "exercise")
+    @OneToMany(mappedBy = "exercise", cascade = CascadeType.ALL)
     private List<CategoryExercise> exercises = new ArrayList<>();
 
     @Builder
@@ -48,5 +58,9 @@ public class Category extends BaseTimeEntity {
         this.parent = parent;
         this.depth = depth;
         this.name = name;
+    }
+
+    public void addParentCategory(Category parentCategory) {
+        this.parent = parentCategory;
     }
 }

@@ -1,15 +1,22 @@
 package com.calendar.workout.domain.exercise;
 
+import static jakarta.persistence.FetchType.LAZY;
+
+import com.calendar.workout.domain.BaseTimeEntity;
 import com.calendar.workout.domain.category.Category;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
-import static jakarta.persistence.FetchType.LAZY;
-
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class CategoryExercise {
+public class CategoryExercise extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
