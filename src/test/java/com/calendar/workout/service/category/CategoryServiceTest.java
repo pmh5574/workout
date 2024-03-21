@@ -4,8 +4,10 @@ package com.calendar.workout.service.category;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import com.calendar.workout.domain.CategoryStatus;
 import com.calendar.workout.domain.category.Category;
 import com.calendar.workout.domain.category.CategoryRepository;
+import com.calendar.workout.dto.category.request.CategoryEdit;
 import com.calendar.workout.dto.category.request.CategoryRequest;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
@@ -120,5 +122,33 @@ class CategoryServiceTest {
 
         assertThat(parentCategory.getChild().get(0)).isEqualTo(category);
 
+    }
+
+    @DisplayName("수정 테스트")
+    @Transactional
+    @Test
+    void edit() {
+        // given
+        CategoryRequest categoryRequest = CategoryRequest.builder()
+                .name("test")
+                .build();
+        Long saveId = categoryService.save(categoryRequest);
+
+        CategoryEdit categoryEdit = CategoryEdit.builder()
+                .depth(2)
+                .categoryStatus(CategoryStatus.NOUSE)
+                .name("test22")
+                .build();
+
+        // when
+        Long childId = categoryService.edit(categoryEdit, saveId);
+
+        // then
+        Category category = categoryRepository.findById(childId)
+                .orElseThrow(() -> new IllegalArgumentException("잘못됨"));
+
+        assertThat(category.getName()).isEqualTo(categoryEdit.getName());
+        assertThat(category.getCategoryStatus()).isEqualTo(categoryEdit.getCategoryStatus());
+        assertThat(category.getDepth()).isEqualTo(categoryEdit.getDepth());
     }
 }

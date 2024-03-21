@@ -5,6 +5,7 @@ import static lombok.AccessLevel.PROTECTED;
 import com.calendar.workout.domain.BaseTimeEntity;
 import com.calendar.workout.domain.CategoryStatus;
 import com.calendar.workout.domain.exercise.CategoryExercise;
+import com.calendar.workout.dto.category.request.CategoryEdit;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -64,10 +65,28 @@ public class Category extends BaseTimeEntity {
 
     public void addParentCategory(Category parentCategory) {
         this.parent = parentCategory;
+
+        if (this.depth == 1) {
+            this.depth += 1;
+        }
+
         parentCategory.addChild(this);
     }
 
     public void addChild(Category... children) {
         this.child.addAll(Arrays.asList(children));
+    }
+
+    public void edit(CategoryEdit categoryRequest) {
+        if (categoryRequest.getCategoryStatus() != null) {
+            this.categoryStatus = categoryRequest.getCategoryStatus();
+        }
+
+        if (categoryRequest.getDepth() != null) {
+            this.depth = categoryRequest.getDepth();
+        }
+
+        this.name = categoryRequest.getName();
+
     }
 }
