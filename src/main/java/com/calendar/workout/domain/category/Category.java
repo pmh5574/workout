@@ -18,6 +18,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
@@ -63,5 +64,10 @@ public class Category extends BaseTimeEntity {
 
     public void addParentCategory(Category parentCategory) {
         this.parent = parentCategory;
+        parentCategory.addChild(this);
+    }
+
+    public void addChild(Category... children) {
+        this.child.addAll(Arrays.asList(children));
     }
 }
