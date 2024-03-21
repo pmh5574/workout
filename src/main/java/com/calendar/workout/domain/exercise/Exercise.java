@@ -6,6 +6,8 @@ import com.calendar.workout.domain.BaseTimeEntity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -28,11 +30,13 @@ public class Exercise extends BaseTimeEntity {
     @Column(nullable = false)
     private String name;
 
+    @Enumerated(EnumType.STRING)
     private ExerciseType exerciseType;
 
+    @Enumerated(EnumType.STRING)
     private ToolType toolType;
 
-    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
-    private List<CategoryExercise> categories = new ArrayList<>();
+    @OneToMany(mappedBy = "exercise", cascade = CascadeType.ALL)
+    private List<CategoryExercise> exerciseCategories = new ArrayList<>();
 
 }

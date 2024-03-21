@@ -50,14 +50,15 @@ public class Category extends BaseTimeEntity {
     @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL)
     private List<Category> child = new ArrayList<>();
 
-    @OneToMany(mappedBy = "exercise", cascade = CascadeType.ALL)
-    private List<CategoryExercise> exercises = new ArrayList<>();
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
+    private List<CategoryExercise> categoryExercises = new ArrayList<>();
 
     @Builder
-    public Category(Category parent, Integer depth, String name) {
+    public Category(Category parent, Integer depth, String name, CategoryStatus categoryStatus) {
         this.parent = parent;
         this.depth = depth;
         this.name = name;
+        this.categoryStatus = categoryStatus;
     }
 
     public void addParentCategory(Category parentCategory) {
