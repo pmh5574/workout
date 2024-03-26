@@ -64,11 +64,15 @@ public class Category extends BaseTimeEntity {
     }
 
     public void addParentCategory(Category parentCategory) {
-        this.parent = parentCategory;
+        checkDeleteStatus(parentCategory.getCategoryStatus());
 
         if (this.depth == 1) {
             this.depth += 1;
         }
+
+        checkDepth(parentCategory.getDepth());
+
+        this.parent = parentCategory;
 
         parentCategory.addChild(this);
     }
@@ -84,9 +88,33 @@ public class Category extends BaseTimeEntity {
 
         if (categoryRequest.getDepth() != null) {
             this.depth = categoryRequest.getDepth();
+            checkParentDepth();
         }
 
         this.name = categoryRequest.getName();
 
     }
+
+    private void checkParentDepth() {
+        if (this.parent != null) {
+            checkDepth(this.parent.getDepth());
+        }
+    }
+
+    public void changeStatus(CategoryStatus categoryStatus) {
+        this.categoryStatus = categoryStatus;
+    }
+
+    public void checkDeleteStatus(CategoryStatus parentCategoryStatus) {
+        if (parentCategoryStatus == CategoryStatus.DELETE) {
+            throw new IllegalArgumentException("부모 카테고리를 찾을 수 없습니다.");
+        }
+    }
+
+    public void checkDepth(Integer parentDepth) {
+        if (parentDepth >= this.depth) {
+            throw new IllegalArgumentException("부모 카테고리 뎁스보다 커야 합니다.");
+        }
+    }
+
 }

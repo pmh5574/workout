@@ -88,10 +88,61 @@ class CategoryServiceTest {
                 .parentId(parentId + 1L)
                 .build();
 
-        assertThatThrownBy(() -> {
-            categoryService.save(categoryRequest2);
-        }).isInstanceOf(IllegalArgumentException.class)
+        assertThatThrownBy(() -> categoryService.save(categoryRequest2))
+                .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("부모 카테고리를 찾을 수 없습니다.");
+    }
+
+    @DisplayName("부모 카테고리 등록시 삭제된 부모라 오류")
+    @Transactional
+    @Test
+    void childSaveDeleteStatusException() {
+        // given
+        CategoryRequest categoryRequest = CategoryRequest.builder()
+                .name("test")
+                .build();
+        Long parentId = categoryService.save(categoryRequest);
+
+        Category category = categoryRepository.findById(parentId)
+                .orElse(null);
+
+        category.changeStatus(CategoryStatus.DELETE);
+
+        // when
+        CategoryRequest categoryChildRequest = CategoryRequest.builder()
+                .parentId(parentId)
+                .name("test")
+                .build();
+
+        assertThatThrownBy(() -> categoryService.save(categoryChildRequest))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("부모 카테고리를 찾을 수 없습니다.");
+    }
+
+    @DisplayName("부모 카테고리 등록시 부모보다 뎁스가 낮으면 오류")
+    @Transactional
+    @Test
+    void childSaveNotLowDepthException() {
+        // given
+        CategoryRequest categoryRequest = CategoryRequest.builder()
+                .depth(2)
+                .name("test")
+                .build();
+        Long parentId = categoryService.save(categoryRequest);
+
+        Category category = categoryRepository.findById(parentId)
+                .orElse(null);
+
+        // when
+        CategoryRequest categoryChildRequest = CategoryRequest.builder()
+                .parentId(parentId)
+                .depth(2)
+                .name("test")
+                .build();
+
+        assertThatThrownBy(() -> categoryService.save(categoryChildRequest))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("부모 카테고리 뎁스보다 커야 합니다.");
     }
 
     @DisplayName("부모 카테고리 등록 후 부모 카테고리에서 하위 카테고리 조회")
@@ -129,10 +180,12 @@ class CategoryServiceTest {
     @Test
     void edit() {
         // given
-        CategoryRequest categoryRequest = CategoryRequest.builder()
+        Category category = Category.builder()
                 .name("test")
+                .categoryStatus(CategoryStatus.USE)
+                .depth(1)
                 .build();
-        Long saveId = categoryService.save(categoryRequest);
+        Category saveCategory = categoryRepository.save(category);
 
         CategoryEdit categoryEdit = CategoryEdit.builder()
                 .depth(2)
@@ -141,14 +194,118 @@ class CategoryServiceTest {
                 .build();
 
         // when
-        Long childId = categoryService.edit(categoryEdit, saveId);
+        Long childId = categoryService.edit(categoryEdit, saveCategory.getId());
 
         // then
-        Category category = categoryRepository.findById(childId)
+        Category changeCategory = categoryRepository.findById(childId)
                 .orElseThrow(() -> new IllegalArgumentException("잘못됨"));
 
-        assertThat(category.getName()).isEqualTo(categoryEdit.getName());
-        assertThat(category.getCategoryStatus()).isEqualTo(categoryEdit.getCategoryStatus());
-        assertThat(category.getDepth()).isEqualTo(categoryEdit.getDepth());
+        assertThat(changeCategory.getName()).isEqualTo(categoryEdit.getName());
+        assertThat(changeCategory.getCategoryStatus()).isEqualTo(categoryEdit.getCategoryStatus());
+        assertThat(changeCategory.getDepth()).isEqualTo(categoryEdit.getDepth());
     }
+
+    @DisplayName("부모 카테고리 수정시 오류")
+    @Transactional
+    @Test
+    void childEditException() {
+        // given
+        Category category = Category.builder()
+                .name("test")
+                .categoryStatus(CategoryStatus.USE)
+                .depth(1)
+                .build();
+        Category saveCategory = categoryRepository.save(category);
+
+        Category childCategoryData = Category.builder()
+                .parent(saveCategory)
+                .categoryStatus(CategoryStatus.USE)
+                .name("test")
+                .depth(1)
+                .build();
+        Category childCategory = categoryRepository.save(childCategoryData);
+
+        CategoryEdit categoryEdit = CategoryEdit.builder()
+                .depth(2)
+                .parentId(childCategory.getId() + 1)
+                .categoryStatus(CategoryStatus.NOUSE)
+                .name("test22")
+                .build();
+
+        // when
+
+        assertThatThrownBy(() -> categoryService.edit(categoryEdit, childCategory.getId()))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("부모 카테고리를 찾을 수 없습니다.");
+    }
+
+    @DisplayName("부모 카테고리 수정시 부모값이 삭제된 값이라 오류")
+    @Transactional
+    @Test
+    void childEditDeleteStatusException() {
+        // given
+        Category category = Category.builder()
+                .name("test")
+                .categoryStatus(CategoryStatus.USE)
+                .depth(1)
+                .build();
+        Category saveCategory = categoryRepository.save(category);
+
+        Category childCategoryData = Category.builder()
+                .parent(saveCategory)
+                .categoryStatus(CategoryStatus.USE)
+                .name("test")
+                .depth(1)
+                .build();
+        Category childCategory = categoryRepository.save(childCategoryData);
+
+        CategoryEdit categoryEdit = CategoryEdit.builder()
+                .depth(2)
+                .parentId(saveCategory.getId())
+                .categoryStatus(CategoryStatus.NOUSE)
+                .name("test22")
+                .build();
+
+        // when
+        saveCategory.changeStatus(CategoryStatus.DELETE);
+
+        assertThatThrownBy(() -> categoryService.edit(categoryEdit, childCategory.getId()))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("부모 카테고리를 찾을 수 없습니다.");
+    }
+
+    @DisplayName("부모 카테고리 수정시 부모값보가 뎁스가 작으면 오류")
+    @Transactional
+    @Test
+    void childEditNotLowDepthException() {
+        // given
+        Category category = Category.builder()
+                .name("test")
+                .categoryStatus(CategoryStatus.USE)
+                .depth(2)
+                .build();
+        Category saveCategory = categoryRepository.save(category);
+
+        Category childCategoryData = Category.builder()
+                .parent(saveCategory)
+                .categoryStatus(CategoryStatus.USE)
+                .name("test")
+                .depth(3)
+                .build();
+        Category childCategory = categoryRepository.save(childCategoryData);
+
+        CategoryEdit categoryEdit = CategoryEdit.builder()
+                .depth(2)
+                .parentId(saveCategory.getId())
+                .categoryStatus(CategoryStatus.NOUSE)
+                .name("test22")
+                .build();
+
+        // when
+        assertThatThrownBy(() -> categoryService.edit(categoryEdit, childCategory.getId()))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("부모 카테고리 뎁스보다 커야 합니다.");
+    }
+
+    // todo categoryService.checkParent 테스트코드 작성
 }
