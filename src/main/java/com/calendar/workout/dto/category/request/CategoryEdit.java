@@ -10,7 +10,7 @@ public class CategoryEdit {
 
     private Long parentId = null;
 
-    private Integer depth = null;
+    private Integer depth = 1;
 
     @NotBlank(message = "카테고리 이름을 입력해 주세요.")
     private String name;
@@ -19,9 +19,19 @@ public class CategoryEdit {
 
     @Builder
     public CategoryEdit(Long parentId, Integer depth, String name, CategoryStatus categoryStatus) {
-        this.parentId = parentId;
-        this.depth = depth;
+        if (parentId != null) {
+            this.parentId = parentId;
+        }
+
+        if (depth != null) {
+            this.depth = depth;
+        }
+
         this.name = name;
-        this.categoryStatus = categoryStatus;
+
+        if (categoryStatus != null) {
+            this.categoryStatus = categoryStatus;
+        }
+
     }
 }

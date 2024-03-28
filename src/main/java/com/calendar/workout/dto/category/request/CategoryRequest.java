@@ -24,7 +24,6 @@ public class CategoryRequest {
 
     public Category toEntity() {
         return Category.builder()
-//                .parentId(parentId)
                 .depth(depth)
                 .name(name)
                 .categoryStatus(categoryStatus)

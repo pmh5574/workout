@@ -125,18 +125,15 @@ class CategoryServiceTest {
     void childSaveNotLowDepthException() {
         // given
         CategoryRequest categoryRequest = CategoryRequest.builder()
-                .depth(2)
+                .depth(1)
                 .name("test")
                 .build();
         Long parentId = categoryService.save(categoryRequest);
 
-        Category category = categoryRepository.findById(parentId)
-                .orElse(null);
-
         // when
         CategoryRequest categoryChildRequest = CategoryRequest.builder()
                 .parentId(parentId)
-                .depth(2)
+                .depth(1)
                 .name("test")
                 .build();
 
@@ -188,7 +185,6 @@ class CategoryServiceTest {
         Category saveCategory = categoryRepository.save(category);
 
         CategoryEdit categoryEdit = CategoryEdit.builder()
-                .depth(2)
                 .categoryStatus(CategoryStatus.NOUSE)
                 .name("test22")
                 .build();

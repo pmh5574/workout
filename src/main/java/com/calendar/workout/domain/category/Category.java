@@ -47,7 +47,7 @@ public class Category extends BaseTimeEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id")
-    private Category parent;
+    private Category parent = null;
 
     @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL)
     private List<Category> child = new ArrayList<>();
@@ -66,19 +66,11 @@ public class Category extends BaseTimeEntity {
     public void addParentCategory(Category parentCategory) {
         checkDeleteStatus(parentCategory.getCategoryStatus());
 
-        if (this.depth == 1) {
-            this.depth += 1;
-        }
-
         checkDepth(parentCategory.getDepth());
 
         this.parent = parentCategory;
 
         parentCategory.addChild(this);
-    }
-
-    public void addChild(Category... children) {
-        this.child.addAll(Arrays.asList(children));
     }
 
     public void edit(CategoryEdit categoryRequest) {
@@ -95,23 +87,27 @@ public class Category extends BaseTimeEntity {
 
     }
 
+    public void changeStatus(CategoryStatus categoryStatus) {
+        this.categoryStatus = categoryStatus;
+    }
+
     private void checkParentDepth() {
         if (this.parent != null) {
             checkDepth(this.parent.getDepth());
         }
     }
 
-    public void changeStatus(CategoryStatus categoryStatus) {
-        this.categoryStatus = categoryStatus;
+    private void addChild(Category... children) {
+        this.child.addAll(Arrays.asList(children));
     }
 
-    public void checkDeleteStatus(CategoryStatus parentCategoryStatus) {
+    private void checkDeleteStatus(CategoryStatus parentCategoryStatus) {
         if (parentCategoryStatus == CategoryStatus.DELETE) {
             throw new IllegalArgumentException("부모 카테고리를 찾을 수 없습니다.");
         }
     }
 
-    public void checkDepth(Integer parentDepth) {
+    private void checkDepth(Integer parentDepth) {
         if (parentDepth >= this.depth) {
             throw new IllegalArgumentException("부모 카테고리 뎁스보다 커야 합니다.");
         }
