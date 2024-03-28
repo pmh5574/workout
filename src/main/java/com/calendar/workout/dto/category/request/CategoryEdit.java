@@ -1,7 +1,6 @@
 package com.calendar.workout.dto.category.request;
 
 import com.calendar.workout.domain.CategoryStatus;
-import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -12,7 +11,6 @@ public class CategoryEdit {
 
     private Integer depth = 1;
 
-    @NotBlank(message = "카테고리 이름을 입력해 주세요.")
     private String name;
 
     private CategoryStatus categoryStatus = null;
@@ -27,7 +25,9 @@ public class CategoryEdit {
             this.depth = depth;
         }
 
-        this.name = name;
+        if (name != null) {
+            this.name = name;
+        }
 
         if (categoryStatus != null) {
             this.categoryStatus = categoryStatus;

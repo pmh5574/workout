@@ -17,6 +17,7 @@ public class CategoryService {
 
     @Transactional
     public Long save(final CategoryRequest categoryRequest) {
+        checkParent(categoryRequest.getDepth(), categoryRequest.getParentId());
 
         Category category = categoryRequest.toEntity();
 
@@ -27,6 +28,7 @@ public class CategoryService {
 
     @Transactional
     public Long edit(final CategoryEdit categoryEdit, final Long category_id) {
+        checkParent(categoryEdit.getDepth(), categoryEdit.getParentId());
 
         Category category = categoryRepository.findById(category_id)
                 .orElseThrow(() -> new RuntimeException("잘못된 요청 입니다."));
@@ -47,4 +49,9 @@ public class CategoryService {
         }
     }
 
+    private void checkParent(Integer depth, Long parentId) {
+        if (depth > 1 && parentId == null) {
+            throw new IllegalArgumentException("부모 값 없이 2뎁스를 설정할 수 없습니다.");
+        }
+    }
 }

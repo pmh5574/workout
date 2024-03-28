@@ -303,5 +303,42 @@ class CategoryServiceTest {
                 .hasMessageContaining("부모 카테고리 뎁스보다 커야 합니다.");
     }
 
-    // todo categoryService.checkParent 테스트코드 작성
+    @DisplayName("값 등록시 부모 값 없이 2뎁스 이상이면 오류")
+    @Transactional
+    @Test
+    void saveCheckParentException() {
+        // given
+        CategoryRequest categoryRequest = CategoryRequest.builder()
+                .name("test")
+                .categoryStatus(CategoryStatus.USE)
+                .depth(2)
+                .build();
+
+        // when
+        assertThatThrownBy(() -> categoryService.save(categoryRequest))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("부모 값 없이 2뎁스를 설정할 수 없습니다.");
+    }
+
+    @DisplayName("값 수정시 부모 값 없이 2뎁스 이상이면 오류")
+    @Transactional
+    @Test
+    void editCheckParentException() {
+        // given
+        Category category = Category.builder()
+                .name("test")
+                .categoryStatus(CategoryStatus.USE)
+                .depth(1)
+                .build();
+        Category saveCategory = categoryRepository.save(category);
+
+        CategoryEdit categoryEdit = CategoryEdit.builder()
+                .depth(2)
+                .build();
+
+        // when
+        assertThatThrownBy(() -> categoryService.edit(categoryEdit, saveCategory.getId()))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("부모 값 없이 2뎁스를 설정할 수 없습니다.");
+    }
 }
