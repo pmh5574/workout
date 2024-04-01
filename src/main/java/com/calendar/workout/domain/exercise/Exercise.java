@@ -14,6 +14,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -39,4 +40,14 @@ public class Exercise extends BaseTimeEntity {
     @OneToMany(mappedBy = "exercise", cascade = CascadeType.ALL)
     private List<CategoryExercise> exerciseCategories = new ArrayList<>();
 
+    @Builder
+    public Exercise(final String name, final ExerciseType exerciseType, final ToolType toolType) {
+        this.name = name;
+        this.exerciseType = exerciseType;
+        this.toolType = toolType;
+    }
+
+    public void addCategoryExerciseList(final List<CategoryExercise> categoryExercises) {
+        this.exerciseCategories = categoryExercises;
+    }
 }
