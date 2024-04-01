@@ -40,7 +40,7 @@ public class CategoryService {
         return category.getId();
     }
 
-    private void addParentCategory(Long parentId, Category category) {
+    private void addParentCategory(final Long parentId, final Category category) {
         if (parentId != null) {
             Category parentCategory = categoryRepository.findById(parentId)
                     .orElseThrow(() -> new IllegalArgumentException("부모 카테고리를 찾을 수 없습니다."));
@@ -49,7 +49,7 @@ public class CategoryService {
         }
     }
 
-    private void checkParent(Integer depth, Long parentId) {
+    private void checkParent(final Integer depth, final Long parentId) {
         if (depth > 1 && parentId == null) {
             throw new IllegalArgumentException("부모 값 없이 2뎁스를 설정할 수 없습니다.");
         }
