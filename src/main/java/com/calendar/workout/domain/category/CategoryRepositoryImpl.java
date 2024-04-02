@@ -10,8 +10,7 @@ import lombok.RequiredArgsConstructor;
 public class CategoryRepositoryImpl implements CategoryRepositoryCustom {
 
     private final JPAQueryFactory jpaQueryFactory;
-
-
+    
     @Override
     public List<Category> findByCategories(final List<Long> categories) {
         return jpaQueryFactory.selectFrom(category)

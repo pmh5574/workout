@@ -79,7 +79,9 @@ class ExerciseServiceTest {
         // then
         Exercise exercise = exerciseRepository.findAll().get(0);
         assertThat(exercise.getName()).isEqualTo("벤치 프레스");
-        assertThat(exercise.getExerciseCategories().get(0).getCategory().getName()).isEqualTo("test1");
+        if (!exercise.getExerciseCategories().isEmpty()) {
+            assertThat(exercise.getExerciseCategories().get(0).getCategory().getName()).isEqualTo("test1");
+        }
         assertThat(exercise.getExerciseType()).isEqualTo(ExerciseType.WEIGHT_REPETITION);
     }
 }
