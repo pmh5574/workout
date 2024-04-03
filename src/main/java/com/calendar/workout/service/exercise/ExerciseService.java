@@ -6,6 +6,7 @@ import com.calendar.workout.domain.exercise.CategoryExercise;
 import com.calendar.workout.domain.exercise.CategoryExerciseRepository;
 import com.calendar.workout.domain.exercise.Exercise;
 import com.calendar.workout.domain.exercise.ExerciseRepository;
+import com.calendar.workout.dto.exercise.request.ExerciseEditRequest;
 import com.calendar.workout.dto.exercise.request.ExerciseSaveRequest;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +36,22 @@ public class ExerciseService {
         }
 
         return saveExercise.getId();
+    }
+
+    @Transactional
+    public Long edit(final ExerciseEditRequest exerciseEditRequest, Long exerciseId) {
+        Exercise exercise = exerciseRepository.findById(exerciseId)
+                .orElseThrow(() -> new RuntimeException("잘못된 요청 입니다."));
+
+        exercise.edit(exerciseEditRequest);
+
+        if (!exerciseEditRequest.getCategories().isEmpty()) {
+            exercise.removeCategoryExercise();
+            exercise.addCategoryExerciseList(
+                    saveCategoryExercise(exerciseEditRequest.getCategories(), exercise));
+        }
+
+        return exercise.getId();
     }
 
     private List<CategoryExercise> saveCategoryExercise(final List<Long> categoryIdLit, final Exercise saveExercise) {

@@ -3,6 +3,7 @@ package com.calendar.workout.domain.exercise;
 import static lombok.AccessLevel.PROTECTED;
 
 import com.calendar.workout.domain.BaseTimeEntity;
+import com.calendar.workout.dto.exercise.request.ExerciseEditRequest;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -49,5 +50,17 @@ public class Exercise extends BaseTimeEntity {
 
     public void addCategoryExerciseList(final List<CategoryExercise> categoryExercises) {
         this.exerciseCategories = categoryExercises;
+    }
+
+    public void edit(final ExerciseEditRequest exerciseEditRequest) {
+        this.name = exerciseEditRequest.getName();
+        this.exerciseType = exerciseEditRequest.getExerciseType();
+        this.toolType = exerciseEditRequest.getToolType();
+
+
+    }
+
+    public void removeCategoryExercise() {
+        exerciseCategories.clear();
     }
 }

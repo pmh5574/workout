@@ -9,6 +9,7 @@ import com.calendar.workout.domain.exercise.Exercise;
 import com.calendar.workout.domain.exercise.ExerciseRepository;
 import com.calendar.workout.domain.exercise.ExerciseType;
 import com.calendar.workout.domain.exercise.ToolType;
+import com.calendar.workout.dto.exercise.request.ExerciseEditRequest;
 import com.calendar.workout.dto.exercise.request.ExerciseSaveRequest;
 import java.util.ArrayList;
 import java.util.List;
@@ -84,4 +85,37 @@ class ExerciseServiceTest {
         }
         assertThat(exercise.getExerciseType()).isEqualTo(ExerciseType.WEIGHT_REPETITION);
     }
+
+    @DisplayName("수정")
+    @Transactional
+    @Test
+    void edit() {
+        // given
+        ExerciseSaveRequest exerciseSaveRequest = ExerciseSaveRequest.builder()
+                .name("벤치 프레스")
+                .exerciseType(ExerciseType.WEIGHT_REPETITION)
+                .toolType(ToolType.EQUIPMENT)
+                .categories(categoryIdList)
+                .build();
+        Long saveId = exerciseService.save(exerciseSaveRequest);
+
+        ExerciseEditRequest exerciseEditRequest = ExerciseEditRequest.builder()
+                .name("팔굽혀펴기")
+                .exerciseType(ExerciseType.REPETITION)
+                .categories(categoryIdList)
+                .build();
+
+        // when
+        Long editId = exerciseService.edit(exerciseEditRequest, saveId);
+
+        // then
+        Exercise exercise = exerciseRepository.findById(editId)
+                .orElseThrow(() -> new RuntimeException(""));
+        assertThat(exercise.getName()).isEqualTo("팔굽혀펴기");
+        if (!exercise.getExerciseCategories().isEmpty()) {
+            assertThat(exercise.getExerciseCategories().get(0).getCategory().getName()).isEqualTo("test1");
+        }
+        assertThat(exercise.getExerciseType()).isEqualTo(ExerciseType.REPETITION);
+    }
+    
 }
