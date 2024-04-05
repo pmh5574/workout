@@ -9,6 +9,11 @@ import com.calendar.workout.domain.category.CategoryRepository;
 import com.calendar.workout.domain.category.CategoryStatus;
 import com.calendar.workout.dto.category.request.CategoryEdit;
 import com.calendar.workout.dto.category.request.CategoryRequest;
+import com.calendar.workout.dto.category.request.CategorySearch;
+import com.calendar.workout.dto.category.response.CategoryListResponse;
+import com.calendar.workout.dto.category.response.CategoryResponse;
+import java.util.List;
+import java.util.stream.IntStream;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -320,7 +325,7 @@ class CategoryServiceTest {
     }
 
     @DisplayName("값 수정시 부모 값 없이 2뎁스 이상이면 오류")
-    @Transactional
+
     @Test
     void editCheckParentException() {
         // given
@@ -339,5 +344,70 @@ class CategoryServiceTest {
         assertThatThrownBy(() -> categoryService.edit(categoryEdit, saveCategory.getId()))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("부모 값 없이 2뎁스를 설정할 수 없습니다.");
+    }
+
+    @DisplayName("상세 조회 테스트")
+    @Test
+    void get() {
+        // given
+        Category category = Category.builder()
+                .name("test")
+                .categoryStatus(CategoryStatus.USE)
+                .depth(1)
+                .build();
+        Category saveCategory = categoryRepository.save(category);
+
+        // when
+        CategoryResponse categoryResponse = categoryService.get(saveCategory.getId());
+
+        // then
+        assertThat(categoryResponse.id()).isEqualTo(category.getId());
+        assertThat(categoryResponse.name()).isEqualTo(category.getName());
+    }
+
+    @DisplayName("상세 조회 테스트 - 존재하지 않는 카테고리")
+    @Transactional
+    @Test
+    void exceptionGet() {
+        // given
+        Category category = Category.builder()
+                .name("test")
+                .categoryStatus(CategoryStatus.USE)
+                .depth(1)
+                .build();
+        Category saveCategory = categoryRepository.save(category);
+
+        // excepected
+        assertThatThrownBy(() -> categoryService.get(saveCategory.getId() + 1L))
+                .isInstanceOf(RuntimeException.class)
+                .hasMessageContaining("존재하지 않는 카테고리 입니다.");
+
+    }
+
+    @DisplayName("리스트 조회 테스트")
+    @Transactional
+    @Test
+    void getList() {
+        // given
+        List<Category> categories = IntStream.range(1, 31)
+                .mapToObj(i -> Category.builder()
+                        .name("test" + i)
+                        .categoryStatus(CategoryStatus.USE)
+                        .depth(1)
+                        .build())
+                .toList();
+        categoryRepository.saveAll(categories);
+
+        CategorySearch categorySearch = CategorySearch.builder()
+                .page(1)
+                .size(20)
+                .build();
+
+        // when
+        List<CategoryListResponse> categoryList = categoryService.getList(categorySearch);
+
+        // then
+        assertThat(categoryList).hasSize(20);
+        assertThat(categoryList.get(0).name()).isEqualTo("test30");
     }
 }

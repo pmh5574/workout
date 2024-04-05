@@ -4,6 +4,10 @@ import com.calendar.workout.domain.category.Category;
 import com.calendar.workout.domain.category.CategoryRepository;
 import com.calendar.workout.dto.category.request.CategoryEdit;
 import com.calendar.workout.dto.category.request.CategoryRequest;
+import com.calendar.workout.dto.category.request.CategorySearch;
+import com.calendar.workout.dto.category.response.CategoryListResponse;
+import com.calendar.workout.dto.category.response.CategoryResponse;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,6 +18,19 @@ import org.springframework.transaction.annotation.Transactional;
 public class CategoryService {
 
     private final CategoryRepository categoryRepository;
+
+    public CategoryResponse get(final Long id) {
+        Category category = categoryRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("존재하지 않는 카테고리 입니다."));
+
+        return new CategoryResponse(category);
+    }
+
+    public List<CategoryListResponse> getList(final CategorySearch categorySearch) {
+        return categoryRepository.getList(categorySearch).stream()
+                .map(CategoryListResponse::new)
+                .toList();
+    }
 
     @Transactional
     public Long save(final CategoryRequest categoryRequest) {
