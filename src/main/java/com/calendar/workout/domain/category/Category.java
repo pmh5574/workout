@@ -3,7 +3,6 @@ package com.calendar.workout.domain.category;
 import static lombok.AccessLevel.PROTECTED;
 
 import com.calendar.workout.domain.BaseTimeEntity;
-import com.calendar.workout.domain.CategoryStatus;
 import com.calendar.workout.domain.exercise.CategoryExercise;
 import com.calendar.workout.dto.category.request.CategoryEdit;
 import jakarta.persistence.CascadeType;

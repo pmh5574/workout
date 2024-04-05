@@ -1,7 +1,7 @@
 package com.calendar.workout.dto.category.request;
 
-import com.calendar.workout.domain.CategoryStatus;
 import com.calendar.workout.domain.category.Category;
+import com.calendar.workout.domain.category.CategoryStatus;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 import lombok.Getter;

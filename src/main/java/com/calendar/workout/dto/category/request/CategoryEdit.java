@@ -1,6 +1,6 @@
 package com.calendar.workout.dto.category.request;
 
-import com.calendar.workout.domain.CategoryStatus;
+import com.calendar.workout.domain.category.CategoryStatus;
 import lombok.Builder;
 import lombok.Getter;
 

@@ -2,9 +2,10 @@ package com.calendar.workout.service.exercise;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.calendar.workout.domain.CategoryStatus;
 import com.calendar.workout.domain.category.Category;
 import com.calendar.workout.domain.category.CategoryRepository;
+import com.calendar.workout.domain.category.CategoryStatus;
+import com.calendar.workout.domain.exercise.CategoryExerciseRepository;
 import com.calendar.workout.domain.exercise.Exercise;
 import com.calendar.workout.domain.exercise.ExerciseRepository;
 import com.calendar.workout.domain.exercise.ExerciseType;
@@ -33,6 +34,9 @@ class ExerciseServiceTest {
     @Autowired
     private CategoryRepository categoryRepository;
 
+    @Autowired
+    private CategoryExerciseRepository categoryExerciseRepository;
+
     List<Long> categoryIdList = new ArrayList<>();
 
     @BeforeEach
@@ -58,6 +62,7 @@ class ExerciseServiceTest {
 
     @AfterEach
     void cleanUp() {
+        categoryExerciseRepository.deleteAll();
         exerciseRepository.deleteAll();
         categoryRepository.deleteAll();
     }
@@ -117,5 +122,5 @@ class ExerciseServiceTest {
         }
         assertThat(exercise.getExerciseType()).isEqualTo(ExerciseType.REPETITION);
     }
-    
+
 }

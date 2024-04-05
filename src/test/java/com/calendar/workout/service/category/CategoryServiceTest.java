@@ -4,9 +4,9 @@ package com.calendar.workout.service.category;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.calendar.workout.domain.CategoryStatus;
 import com.calendar.workout.domain.category.Category;
 import com.calendar.workout.domain.category.CategoryRepository;
+import com.calendar.workout.domain.category.CategoryStatus;
 import com.calendar.workout.dto.category.request.CategoryEdit;
 import com.calendar.workout.dto.category.request.CategoryRequest;
 import org.junit.jupiter.api.AfterEach;
@@ -185,7 +185,7 @@ class CategoryServiceTest {
         Category saveCategory = categoryRepository.save(category);
 
         CategoryEdit categoryEdit = CategoryEdit.builder()
-                .categoryStatus(CategoryStatus.NOUSE)
+                .categoryStatus(CategoryStatus.NO_USE)
                 .name("test22")
                 .build();
 
@@ -224,12 +224,11 @@ class CategoryServiceTest {
         CategoryEdit categoryEdit = CategoryEdit.builder()
                 .depth(2)
                 .parentId(childCategory.getId() + 1)
-                .categoryStatus(CategoryStatus.NOUSE)
+                .categoryStatus(CategoryStatus.NO_USE)
                 .name("test22")
                 .build();
 
         // when
-
         assertThatThrownBy(() -> categoryService.edit(categoryEdit, childCategory.getId()))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("부모 카테고리를 찾을 수 없습니다.");
@@ -258,7 +257,7 @@ class CategoryServiceTest {
         CategoryEdit categoryEdit = CategoryEdit.builder()
                 .depth(2)
                 .parentId(saveCategory.getId())
-                .categoryStatus(CategoryStatus.NOUSE)
+                .categoryStatus(CategoryStatus.NO_USE)
                 .name("test22")
                 .build();
 
@@ -293,7 +292,7 @@ class CategoryServiceTest {
         CategoryEdit categoryEdit = CategoryEdit.builder()
                 .depth(2)
                 .parentId(saveCategory.getId())
-                .categoryStatus(CategoryStatus.NOUSE)
+                .categoryStatus(CategoryStatus.NO_USE)
                 .name("test22")
                 .build();
 
