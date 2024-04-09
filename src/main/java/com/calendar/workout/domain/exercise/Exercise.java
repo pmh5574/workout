@@ -3,6 +3,7 @@ package com.calendar.workout.domain.exercise;
 import static lombok.AccessLevel.PROTECTED;
 
 import com.calendar.workout.domain.BaseTimeEntity;
+import com.calendar.workout.domain.workout.Workout;
 import com.calendar.workout.dto.exercise.request.ExerciseEditRequest;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -40,6 +41,9 @@ public class Exercise extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "exercise", cascade = CascadeType.ALL)
     private List<CategoryExercise> exerciseCategories = new ArrayList<>();
+
+    @OneToMany(mappedBy = "exercise", cascade = CascadeType.ALL)
+    private List<Workout> workouts = new ArrayList<>();
 
     @Builder
     public Exercise(final String name, final ExerciseType exerciseType, final ToolType toolType) {
