@@ -17,6 +17,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
 class WorkoutServiceTest {
@@ -44,6 +45,7 @@ class WorkoutServiceTest {
         this.exerciseId = exercise.getId();
     }
 
+    @Transactional
     @DisplayName("운동 등록 테스트")
     @Test
     void save() {
@@ -69,6 +71,7 @@ class WorkoutServiceTest {
         assertThat(workout.getRestTime()).isEqualTo(LocalTime.of(0, 0, 30));
     }
 
+    @Transactional
     @DisplayName("운동 수정 테스트")
     @Test
     void edit() {
