@@ -1,17 +1,17 @@
 package com.calendar.workout.domain.posts;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import com.calendar.workout.domain.member.Member;
 import com.calendar.workout.domain.member.MemberRepository;
+import java.time.LocalDateTime;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import java.time.LocalDateTime;
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
+import org.springframework.transaction.annotation.Transactional;
 
 
 @SpringBootTest
@@ -37,6 +37,7 @@ class PostsRepositoryTest {
         postsRepository.deleteAll();
     }
 
+    @Transactional
     @Test
     @DisplayName("게시글저장 불러오기")
     void test() {
@@ -56,6 +57,7 @@ class PostsRepositoryTest {
         assertThat(posts.getContent()).isEqualTo("테스트 본문");
     }
 
+    @Transactional
     @Test
     @DisplayName("BaseTimeEntity 등록")
     void test2() {
@@ -76,6 +78,7 @@ class PostsRepositoryTest {
         assertThat(posts.getModifiedDate()).isAfter(now);
     }
 
+    @Transactional
     @Test
     @DisplayName("querydsl을 이용해서 추가한 getList 테스트")
     void test3() {
