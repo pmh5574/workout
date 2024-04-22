@@ -100,10 +100,10 @@ openapi3 {
     title = "SAMPLE API 문서"
     description = "Spring REST Docs with SwaggerUI."
     version = "0.0.1"
-    outputFileNamePrefix = 'SAMPLE - 0.0.1'
+    outputFileNamePrefix = 'open-api-0.0.1'
     format = 'json'
 
-    // /static/docs/SAMPLE - 0.0.1.json 생성 → jar 파일만 배포할 예정이기에 build 에 출력
+    // /static/docs/open-api-0.0.1.json 생성 → jar 파일만 배포할 예정이기에 build 에 출력
     outputDirectory = 'build/resources/main/static/docs'
 }
 

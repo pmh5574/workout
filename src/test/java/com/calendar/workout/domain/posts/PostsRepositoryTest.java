@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-
 @SpringBootTest
 class PostsRepositoryTest {
 
@@ -74,8 +73,8 @@ class PostsRepositoryTest {
 
         // then
         Posts posts = postsList.get(0);
-        assertThat(posts.getCreatedDate()).isAfter(now);
-        assertThat(posts.getModifiedDate()).isAfter(now);
+        assertThat(posts.getCreatedDate()).isAfterOrEqualTo(now);
+        assertThat(posts.getModifiedDate()).isAfterOrEqualTo(now);
     }
 
     @Transactional

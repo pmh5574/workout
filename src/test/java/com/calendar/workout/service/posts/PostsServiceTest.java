@@ -1,5 +1,8 @@
 package com.calendar.workout.service.posts;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
 import com.calendar.workout.domain.member.Member;
 import com.calendar.workout.domain.member.MemberRepository;
 import com.calendar.workout.domain.posts.Posts;
@@ -8,18 +11,14 @@ import com.calendar.workout.dto.posts.request.PostsEditRequest;
 import com.calendar.workout.dto.posts.request.PostsSaveRequest;
 import com.calendar.workout.dto.posts.response.PostsListResponse;
 import com.calendar.workout.exception.PostsNotFound;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @SpringBootTest
 class PostsServiceTest {
@@ -36,7 +35,7 @@ class PostsServiceTest {
     Member member;
 
     @BeforeEach
-    public void cleanup () {
+    public void cleanup() {
         member = Member.builder()
                 .oauthId("test1")
                 .name("테스터")
@@ -166,7 +165,6 @@ class PostsServiceTest {
         postsRepository.save(posts);
 
         // when
-
 
         // then
         assertThatThrownBy(() -> postsService.delete(2L))

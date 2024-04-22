@@ -1,5 +1,8 @@
 package com.calendar.workout.web.auth;
 
+import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+
 import com.calendar.workout.dto.auth.AuthTokens;
 import com.calendar.workout.dto.auth.request.LoginRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -10,9 +13,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
-
-import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 @AutoConfigureMockMvc
 @SpringBootTest
@@ -44,7 +44,7 @@ class AuthControllerTest {
 
         // then
         ResultActions resultActions = mockMvc.perform(post("/api/auth/{oauthType}", TYPE_GOOGLE)
-                        .contentType(APPLICATION_JSON)
-                        .content(json));
+                .contentType(APPLICATION_JSON)
+                .content(json));
     }
 }
